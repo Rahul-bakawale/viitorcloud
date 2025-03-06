@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
-import { Button } from "react-bootstrap";
-// import { useNavigate } from "react-router-dom";
+import { Button, Alert } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [credentials, setCredential] = useState({
     Email: "",
@@ -10,7 +10,8 @@ const Login = () => {
   });
   console.log("credentials", credentials);
   const [errors, setErrors] = useState({});
-  // const navigate = useNavigate();
+  const [successMessage, setSuccessMessage] = useState("");
+  const navigate = useNavigate();
 
   const handelSubmit = (e) => {
     e.preventDefault();
@@ -20,16 +21,21 @@ const Login = () => {
       storeUser.Email !== credentials.Email ||
       storeUser.Password !== credentials.Password
     ) {
-      setErrors("invalid  credential");
+      setErrors({ general: "Invalid credentials" });
+      setSuccessMessage("");
       return;
     }
     localStorage.setItem("authToken", "loggedin");
-    // navigate("/dashboard");
+    setErrors({});
+    setSuccessMessage("Login Successful!");
+    navigate("/dashboard");
   };
   return (
     <Container>
       <h2>Login</h2>
       <br />
+      {successMessage && <Alert variant="success">{successMessage}</Alert>}
+      {errors.general && <Alert variant="danger">{errors.general}</Alert>}
       <Form onSubmit={handelSubmit}>
         <Form.Group className="mb-12" controlId="exampleForm.ControlInput1">
           <Form.Label>Email </Form.Label>
@@ -41,23 +47,19 @@ const Login = () => {
             }
             placeholder="Enter Email"
           />
-          <p className="text-danger">{errors?.Email} </p>
         </Form.Group>
         <Form.Group className="mb-12" controlId="exampleForm.ControlInput1">
-          <Form.Label>password</Form.Label>
+          <Form.Label>Password</Form.Label>
           <Form.Control
             type="password"
             value={credentials.Password}
             onChange={(e) =>
               setCredential({ ...credentials, Password: e.target.value })
             }
-            placeholder="Enter Email"
+            placeholder="Enter Password"
           />
         </Form.Group>
-
         <br />
-        <p className="text-danger">{errors?.Password} </p>
-
         <Button type="submit">Login</Button>
       </Form>
     </Container>

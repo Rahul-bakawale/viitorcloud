@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
-import { Button } from "react-bootstrap";
-// import { useNavigate } from "react-router-dom";
+import { Button, Alert } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 const Registration = () => {
   const [formData, setFormData] = useState({
     Username: "",
@@ -11,16 +11,27 @@ const Registration = () => {
     ConfirmPassword: "",
   });
   const [errors, setErrors] = useState({});
-  //   const navigate = useNavigate();
+  const [successMessage, setSuccessMessage] = useState("");
+  const navigate = useNavigate();
   console.log("formData", formData);
   const validateForm = () => {
     let newErrors = {};
-    if (!formData?.Username) newErrors.Username = "User Name is required";
-    if (!formData?.Email) newErrors.Email = "email is required";
-    if (formData?.Password.length < 8)
-      newErrors.Password = "password is required";
-    if (formData?.Password !== formData?.ConfirmPassword)
-      newErrors.ConfirmPassword = "password do not match ";
+    if (!formData.Username.trim()) newErrors.Username = "User Name is required";
+    if (!formData.Email.trim()) {
+      newErrors.Email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.Email)) {
+      newErrors.Email = "Invalid email format";
+    }
+    if (!formData.Password) {
+      newErrors.Password = "Password is required";
+    } else if (formData.Password.length < 8) {
+      newErrors.Password = "Password must be at least 8 characters";
+    }
+    if (!formData.ConfirmPassword) {
+      newErrors.ConfirmPassword = "Confirm Password is required";
+    } else if (formData.Password !== formData.ConfirmPassword) {
+      newErrors.ConfirmPassword = "Passwords do not match";
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -29,13 +40,17 @@ const Registration = () => {
     e.preventDefault();
     if (!validateForm()) return;
     localStorage.setItem("user", JSON.stringify(formData));
-    // navigate("/login");
+    setSuccessMessage("Registration Successful!");
+    setFormData({ Username: "", Email: "", Password: "", ConfirmPassword: "" });
+    setErrors({});
+    navigate("/login");
   };
   return (
     <>
       <Container>
         <h2>Registration</h2>
         <br />
+        {successMessage && <Alert variant="success">{successMessage}</Alert>}
         <Form onSubmit={handelSubmit}>
           <Form.Group className="mb-12" controlId="exampleForm.ControlInput1">
             <Form.Label>Username</Form.Label>
@@ -62,14 +77,14 @@ const Registration = () => {
             <p className="text-danger">{errors?.Email} </p>
           </Form.Group>
           <Form.Group className="mb-12" controlId="exampleForm.ControlInput1">
-            <Form.Label>password</Form.Label>
+            <Form.Label>Password</Form.Label>
             <Form.Control
               type="password"
               value={formData.Password}
               onChange={(e) =>
                 setFormData({ ...formData, Password: e.target.value })
               }
-              placeholder="Enter Email"
+              placeholder="Enter Password"
             />
             <p className="text-danger">{errors?.Password} </p>
           </Form.Group>
@@ -81,7 +96,7 @@ const Registration = () => {
               onChange={(e) =>
                 setFormData({ ...formData, ConfirmPassword: e.target.value })
               }
-              placeholder="Enter Email"
+              placeholder="Confirm Password"
             />
             <p className="text-danger">{errors?.ConfirmPassword} </p>
           </Form.Group>

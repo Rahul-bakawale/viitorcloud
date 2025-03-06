@@ -1,4 +1,4 @@
-// import { Route, Router, Routes } from "react-router-dom";
+import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
   BrowserRouter as Router,
@@ -13,27 +13,21 @@ import PrivateRoutes from "./components/privateRoute/Route";
 
 function App() {
   return (
-    <>
-      <Registration />
-      <Login /> <Dashboard />
-    </>
-
-    // <Router>
-    //   <Routes>
-    //     <Route path="/" element={<Navigate to="/register" />} />
-    //     <Route path="/register" element={<Registration />}>
-    //       <Route path="/login" element={<Login />} />
-    //       <Route
-    //         path="/dashboard"
-    //         element={
-    //           <PrivateRoutes>
-    //             <Dashboard />
-    //           </PrivateRoutes>
-    //         }
-    //       />
-    //     </Route>
-    //   </Routes>
-    // </Router>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Navigate to="/register" />} />
+        <Route path="/register" element={<Registration />} />
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoutes>
+              <Dashboard />
+            </PrivateRoutes>
+          }
+        />
+      </Routes>
+    </Router>
   );
 }
 
