@@ -8,8 +8,8 @@ import {
 } from "react-router-dom";
 import Registration from "./components/registrationPage/Registration";
 import Login from "./components/loginPage/Login";
-import Dashboard from "./components/Dashboard/Dashboard";
 import PrivateRoutes from "./components/privateRoute/Route";
+import Dashboard from "./components/Dashboard/Dashboard";
 
 function App() {
   return (
