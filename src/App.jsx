@@ -9,8 +9,7 @@ import {
 import Registration from "./components/registrationPage/Registration";
 import Login from "./components/loginPage/Login";
 import PrivateRoutes from "./components/privateRoute/Route";
-import Dashboard from "./components/Dashboard/Dashboard";
-
+import Dashboard from "./components/dashboard/Dashboard";
 function App() {
   return (
     <Router>
