@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
-import { Button, Alert } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [credentials, setCredential] = useState({
@@ -34,8 +34,8 @@ const Login = () => {
     <Container>
       <h2>Login</h2>
       <br />
-      {successMessage && <Alert variant="success">{successMessage}</Alert>}
-      {errors.general && <Alert variant="danger">{errors.general}</Alert>}
+      {successMessage && <p>{successMessage}</p>}
+      {errors.general && <p>{errors.general}</p>}
       <Form onSubmit={handelSubmit}>
         <Form.Group className="mb-12" controlId="exampleForm.ControlInput1">
           <Form.Label>Email </Form.Label>

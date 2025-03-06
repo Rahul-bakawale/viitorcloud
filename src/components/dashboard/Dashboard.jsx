@@ -1,14 +1,28 @@
 import { useState } from "react";
-import { Container, Form, Table, Button, Alert } from "react-bootstrap";
+import { Container, Form, Table, Button, Pagination } from "react-bootstrap";
 import { dummyData } from "../../dummyData";
 
 const Dashboard = () => {
   const [search, setSearch] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const filteredUserData = dummyData.filter((user) =>
     user.name.toLowerCase().trim().includes(search.toLowerCase().trim())
   );
+
+  const totalPages = Math.ceil(filteredUserData.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredUserData.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   const removeDataFormLoc = () => {
     localStorage.removeItem("authToken");
@@ -22,13 +36,15 @@ const Dashboard = () => {
     <Container>
       <h2>Dashboard</h2>
 
-      {successMessage && <Alert variant="success">{successMessage}</Alert>}
+      {successMessage && { successMessage }}
 
-      <Form.Group className="mb-12" controlId="exampleForm.ControlInput1">
+      <Form.Group className="mb-3">
         <Form.Control
           type="text"
+          value={search}
           onChange={(e) => {
             setSearch(e.target.value);
+            setCurrentPage(1);
           }}
           placeholder="Search by name"
         />
@@ -44,18 +60,39 @@ const Dashboard = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredUserData.slice(0, 5).map((i) => (
-            <tr key={i.id}>
-              <td>{i.id}</td>
-              <td>{i.name}</td>
-              <td>{i.number}</td>
-              <td>{i.status}</td>
+          {currentItems.map((user) => (
+            <tr key={user.id}>
+              <td>{user.id}</td>
+              <td>{user.name}</td>
+              <td>{user.number}</td>
+              <td>{user.status.toString()}</td>
             </tr>
           ))}
         </tbody>
       </Table>
+      <Pagination>
+        <Pagination.Prev
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        />
+        {[...Array(totalPages)].map((_, index) => (
+          <Pagination.Item
+            key={index + 1}
+            active={index + 1 === currentPage}
+            onClick={() => handlePageChange(index + 1)}
+          >
+            {index + 1}
+          </Pagination.Item>
+        ))}
+        <Pagination.Next
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        />
+      </Pagination>
 
-      <Button onClick={removeDataFormLoc}>Logout</Button>
+      <Button onClick={removeDataFormLoc} className="mt-3">
+        Logout
+      </Button>
     </Container>
   );
 };

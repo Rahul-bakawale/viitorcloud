@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
-import { Button, Alert } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 const Registration = () => {
   const [formData, setFormData] = useState({
@@ -50,7 +50,7 @@ const Registration = () => {
       <Container>
         <h2>Registration</h2>
         <br />
-        {successMessage && <Alert variant="success">{successMessage}</Alert>}
+        {successMessage && <p variant="success">{successMessage}</p>}
         <Form onSubmit={handelSubmit}>
           <Form.Group className="mb-12" controlId="exampleForm.ControlInput1">
             <Form.Label>Username</Form.Label>
